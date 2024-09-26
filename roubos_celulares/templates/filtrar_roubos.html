@@ -1,10 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>filtrar_roubos</title>
-</head>
-<body>
-    <h1>filtrar_roubos</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Bairros mais atacados</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mapa-col">
+            <!-- Mapa -->
+            <div id="map-container">
+                {{ mapa_html|safe }}  <!-- Renderiza o HTML do mapa diretamente -->
+            </div>
+        </div>
+        <div class="col-md-4 lista-col d-flex flex-column">
+            <!-- Lista de Bairros -->
+            <h2>Bairros Mais Atacados</h2>
+            <ul id="bairros-lista" class="list-unstyled">
+                {% for bairro in bairros_mais_atacados %}
+                    <li id="bairro-{{ bairro.id }}">
+                        {{ bairro.bairro }}: {{ bairro.num_ocorrencias }} ocorrências
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="mt-auto">
+                <button id="carregar-mais" class="btn btn-primary">Carregar mais</button>
+                <button id="remover-ultimos-5" class="btn btn-danger">Remover últimos 5</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}

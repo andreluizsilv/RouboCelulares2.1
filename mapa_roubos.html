@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_f18e10e7e60d996bdf80cba9e4f2f508 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_f18e10e7e60d996bdf80cba9e4f2f508" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_f18e10e7e60d996bdf80cba9e4f2f508 = L.map(
+                "map_f18e10e7e60d996bdf80cba9e4f2f508",
+                {
+                    center: [-23.5505, -46.6333],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_a368d3870f93d47fb155b5651fdb6d9d = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_a368d3870f93d47fb155b5651fdb6d9d.addTo(map_f18e10e7e60d996bdf80cba9e4f2f508);
+        
+    
+            var marker_a52de5c52bf33e2ec10d47adf9b2fa16 = L.marker(
+                [-23.705099127, -46.5520491729999],
+                {}
+            ).addTo(map_f18e10e7e60d996bdf80cba9e4f2f508);
+        
+    
+            var icon_31381fa9e56f4dc359e4a65ed32372c7 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_a52de5c52bf33e2ec10d47adf9b2fa16.setIcon(icon_31381fa9e56f4dc359e4a65ed32372c7);
+        
+    
+        var popup_4ab4cf2aaa903d12f7c463caa11af67e = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_6cb4d42b064a80b32fcc523226c982ec = $(`<div id="html_6cb4d42b064a80b32fcc523226c982ec" style="width: 100.0%; height: 100.0%;">CENTRO: 13104 ocorrências</div>`)[0];
+                popup_4ab4cf2aaa903d12f7c463caa11af67e.setContent(html_6cb4d42b064a80b32fcc523226c982ec);
+            
+        
+
+        marker_a52de5c52bf33e2ec10d47adf9b2fa16.bindPopup(popup_4ab4cf2aaa903d12f7c463caa11af67e)
+        ;
+
+        
+    
+    
+            var marker_510bd938e3e1f83af63a5d0e9cec2e85 = L.marker(
+                [-23.5602288, -46.6898831],
+                {}
+            ).addTo(map_f18e10e7e60d996bdf80cba9e4f2f508);
+        
+    
+            var icon_5443f0d411d90e930b2d71f194e640b0 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_510bd938e3e1f83af63a5d0e9cec2e85.setIcon(icon_5443f0d411d90e930b2d71f194e640b0);
+        
+    
+        var popup_bd5b73e678afaf83f8761103bea2b907 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_69fb30dc0d0c6db0476dc0af398fd825 = $(`<div id="html_69fb30dc0d0c6db0476dc0af398fd825" style="width: 100.0%; height: 100.0%;">PINHEIROS: 3286 ocorrências</div>`)[0];
+                popup_bd5b73e678afaf83f8761103bea2b907.setContent(html_69fb30dc0d0c6db0476dc0af398fd825);
+            
+        
+
+        marker_510bd938e3e1f83af63a5d0e9cec2e85.bindPopup(popup_bd5b73e678afaf83f8761103bea2b907)
+        ;
+
+        
+    
+    
+            var marker_ddeaf69ba7e54bfe868ba86c3b756177 = L.marker(
+                [-23.5519758, -46.6455744],
+                {}
+            ).addTo(map_f18e10e7e60d996bdf80cba9e4f2f508);
+        
+    
+            var icon_0ff81498aed082380077312a4b7e33d3 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_ddeaf69ba7e54bfe868ba86c3b756177.setIcon(icon_0ff81498aed082380077312a4b7e33d3);
+        
+    
+        var popup_d4b0574c68a595e02e422732950ef4d8 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_23296f286c059e0faf2f612edac6f471 = $(`<div id="html_23296f286c059e0faf2f612edac6f471" style="width: 100.0%; height: 100.0%;">BELA VISTA: 2984 ocorrências</div>`)[0];
+                popup_d4b0574c68a595e02e422732950ef4d8.setContent(html_23296f286c059e0faf2f612edac6f471);
+            
+        
+
+        marker_ddeaf69ba7e54bfe868ba86c3b756177.bindPopup(popup_d4b0574c68a595e02e422732950ef4d8)
+        ;
+
+        
+    
+    
+            var marker_a60e36f79a4b1afaf4b13d0244981089 = L.marker(
+                [-23.5230758, -46.655111],
+                {}
+            ).addTo(map_f18e10e7e60d996bdf80cba9e4f2f508);
+        
+    
+            var icon_2b1a8662a2e6203725446c2445f46544 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_a60e36f79a4b1afaf4b13d0244981089.setIcon(icon_2b1a8662a2e6203725446c2445f46544);
+        
+    
+        var popup_bfcfa751f4ed15b844f99ed2d23425c6 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_c110f0e1a06f4e3fd75fdf9334f2585e = $(`<div id="html_c110f0e1a06f4e3fd75fdf9334f2585e" style="width: 100.0%; height: 100.0%;">BARRA FUNDA: 2297 ocorrências</div>`)[0];
+                popup_bfcfa751f4ed15b844f99ed2d23425c6.setContent(html_c110f0e1a06f4e3fd75fdf9334f2585e);
+            
+        
+
+        marker_a60e36f79a4b1afaf4b13d0244981089.bindPopup(popup_bfcfa751f4ed15b844f99ed2d23425c6)
+        ;
+
+        
+    
+    
+            var marker_b772f38e2fb6964dbff5d69f9d7e7e41 = L.marker(
+                [-23.549657689, -46.6398665479999],
+                {}
+            ).addTo(map_f18e10e7e60d996bdf80cba9e4f2f508);
+        
+    
+            var icon_8c8ed65cfb3d5fab483a360a923c4c6c = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_b772f38e2fb6964dbff5d69f9d7e7e41.setIcon(icon_8c8ed65cfb3d5fab483a360a923c4c6c);
+        
+    
+        var popup_106dc83189fe7e00e57874619ce28853 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_c6691b1afb9032fc421831984e8113a1 = $(`<div id="html_c6691b1afb9032fc421831984e8113a1" style="width: 100.0%; height: 100.0%;">REPUBLICA: 2261 ocorrências</div>`)[0];
+                popup_106dc83189fe7e00e57874619ce28853.setContent(html_c6691b1afb9032fc421831984e8113a1);
+            
+        
+
+        marker_b772f38e2fb6964dbff5d69f9d7e7e41.bindPopup(popup_106dc83189fe7e00e57874619ce28853)
+        ;
+
+        
+    
+</script>
+</html>
