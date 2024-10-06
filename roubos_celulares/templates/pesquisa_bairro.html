@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Resultados da Pesquisa</h2>
+
+    {% if bairros_encontrados %}
+        <ul>
+            {% for bairro in bairros_encontrados %}
+                <li>
+                    <a href="{% url 'detalhes_ocorrencia' bairro.id %}">{{ bairro.nome }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhum bairro encontrado para "{{ query }}"</p>
+    {% endif %}
+{% endblock %}

@@ -1,10 +1,24 @@
-# urls.py do aplicativo (roubos_celulares/urls.py)
-
 from django.urls import path
-from .views import mapa_roubos, carregar_bairros, remover_bairro
+from . import views
 
 urlpatterns = [
-    path('', mapa_roubos, name='mapa_roubos'),
-    path('carregar_bairros/', carregar_bairros, name='carregar_bairros'),
-    path('remover_bairro/<int:id>/', remover_bairro, name='remover_bairro'),
+    # Rota para a página inicial ou mapa de roubos
+    path('', views.mapa_roubos, name='mapa_roubos'),
+
+    # Rota para a página de detalhes de uma ocorrência específica
+    path('detalhes/<int:id>/', views.detalhes_ocorrencia, name='detalhes_ocorrencia'),
+    path('pesquisa/', views.pesquisar_bairro, name='pesquisar_bairro'),
+
+    # Rotas para feedback
+    path('feedback/', views.feedback, name='feedback'),
+    path('feedback-success/', views.feedback_success, name='feedback_success'),
+
+    # Rota para listar bairros (disponível apenas para usuários autenticados)
+    path('bairros/', views.listar_bairros, name='listar_bairros'),
+
+    # Rota para editar bairros (disponível apenas para usuários autenticados)
+    path('bairros/editar/', views.editar_bairro, name='editar_bairro'),
+
+    # Rota para deletar bairro (disponível apenas para usuários autenticados)
+    path('bairros/deletar/', views.deletar_bairro, name='deletar_bairro'),
 ]

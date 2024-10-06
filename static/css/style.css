@@ -1,3 +1,9 @@
+body {
+    background-color: aquamarine !important;
+    height: 100%;
+    margin: 0;
+}
+
 #map-container {
     height: 500px; /* Altura do mapa */
     width: 100%; /* Largura total para o contêiner do mapa */
@@ -5,7 +11,6 @@
 
 .mapa-col {
     padding: 0; /* Remove o padding da coluna do mapa */
-    text-align: left; /* Alinha o texto à esquerda */
 }
 
 .lista-col {
@@ -13,9 +18,20 @@
     display: flex;
     flex-direction: column; /* Garante que a lista e os botões estejam na coluna */
     justify-content: flex-start; /* Alinha os itens ao início da coluna */
-    text-align: right; /* Alinha o texto à direita (opcional) */
+    text-align: left; /* Alinha o texto à esquerda */
 }
 
 .lista-col h2 {
     margin-bottom: 20px; /* Adiciona espaço abaixo do título */
+}
+
+.lista-col li {
+    margin-left: 0; /* Garante que os itens da lista encostem na margem esquerda */
+}
+
+/* Ajusta o contêiner para ocupar toda a largura disponível */
+.container {
+    display: flex;
+    flex-direction: row; /* Alinha colunas na horizontal */
+    justify-content: space-between; /* Espaça as colunas */
 }

@@ -1,72 +1,129 @@
 from django.db.models import Count
-from django.shortcuts import render
-from .models import *
-from django.http import JsonResponse, HttpResponse
-import folium
+from django.shortcuts import render, get_object_or_404
+from .models import Bairro, Roubo
+from .mapa import gerar_mapa  # Importa a função de mapa.py
 
 def mapa_roubos(request):
-    quantidade_por_pagina = 5
-
-    # Filtra os roubos
-    roubos = Roubo.objects.all()
-
-    # Calcula os 5 primeiros bairros com mais ocorrências de roubos
+    # Filtra todos os roubos e calcula os 5 bairros mais atacados
     bairros_mais_atacados = (
-        roubos.values('bairro__nome')
-        .annotate(num_ocorrencias=Count('bairro'))
-        .order_by('-num_ocorrencias')[:quantidade_por_pagina]
+        Roubo.objects.values('bairro__nome')
+        .annotate(num_ocorrencias=Count('id'))
+        .order_by('-num_ocorrencias')[:5]
     )
 
-    # Cria um mapa Folium
-    m = folium.Map(location=[-23.5505, -46.6333], zoom_start=12)
-
-    # Adiciona marcadores para cada bairro
+    # Coleta as informações dos bairros
+    bairros_info = []
     for bairro_data in bairros_mais_atacados:
         bairro_obj = Bairro.objects.filter(nome__iexact=bairro_data['bairro__nome']).first()
-
         if bairro_obj and bairro_obj.latitude is not None and bairro_obj.longitude is not None:
-            folium.Marker(
-                location=[bairro_obj.latitude, bairro_obj.longitude],
-                popup=f"{bairro_obj.nome}: {bairro_data['num_ocorrencias']} ocorrências",
-                icon=folium.Icon(color='blue')
-            ).add_to(m)
+            bairros_info.append({
+                'id': bairro_obj.id,  # Adiciona o ID do bairro
+                'nome': bairro_obj.nome,
+                'num_ocorrencias': bairro_data['num_ocorrencias'],
+                'latitude': bairro_obj.latitude,
+                'longitude': bairro_obj.longitude
+            })
 
-    # Renderiza o HTML do mapa
-    mapa_html = m._repr_html_()
+    # Gera o mapa usando a função gerar_mapa
+    mapa_html = gerar_mapa(bairros_info)
 
     context = {
-        'bairros_mais_atacados': bairros_mais_atacados,
+        'bairros_info': bairros_info,
         'mapa_html': mapa_html,
     }
 
     return render(request, 'filtrar_roubos.html', context)
 
-def carregar_bairros(request):
-    try:
-        offset = int(request.GET.get('offset', 0))
-        limit = 5  # O número de bairros que você deseja carregar a cada requisição
 
-        # Obtenha os próximos bairros a partir do offset
-        bairros = Bairro.objects.all()[offset:offset + limit]
+def detalhes_ocorrencia(request, id):
+    # Obtém o bairro pelo ID
+    bairro = get_object_or_404(Bairro, id=id)
 
-        # Verifique se 'related_name' está correto ou use 'roubo_set'
-        bairros_lista = [{'bairro': bairro.nome, 'num_ocorrencias': bairro.roubo_set.count()} for bairro in bairros]
+    # Usa a função `contar_ocorrencias_por_bairro` apenas se quiser contagem geral (opcional)
+    # ocor_por_bairro = Roubo.contar_ocorrencias_por_bairro().filter(bairro=bairro)
 
-        return JsonResponse({'bairros': bairros_lista})
+    # Filtra as ocorrências relacionadas ao bairro, usando diretamente o objeto `bairro`
+    ocorrencias = (
+        Roubo.objects.filter(bairro=bairro)
+        .exclude(hora_ocorrencia='00:00:00')
+        .exclude(rua__icontains='VEDAÇÃO DA DIVULGAÇÃO DOS DADOS RELATIVOS')
+        .values('rua', 'hora_ocorrencia')
+        .annotate(num_ocorrencias=Count('id'))
+        .order_by('-num_ocorrencias')
+    )
 
-    except Exception as e:
-        # Log da exceção para depuração
-        print(f"Erro ao carregar bairros: {str(e)}")
-        return JsonResponse({'error': 'Ocorreu um erro ao carregar os bairros.'}, status=500)
+    # Agrupa as ocorrências por logradouro e horários, contando as ocorrências por hora
+    ocorrencias_agrupadas = {}
+    for ocorrencia in ocorrencias:
+        rua = ocorrencia['rua']
+        hora = ocorrencia['hora_ocorrencia'].strftime('%H:%M') if ocorrencia['hora_ocorrencia'] else 'Desconhecida'
+        num_ocorrencias = ocorrencia['num_ocorrencias']
+
+        if rua not in ocorrencias_agrupadas:
+            ocorrencias_agrupadas[rua] = {'horas': {}, 'total': 0}
+
+        if hora not in ocorrencias_agrupadas[rua]['horas']:
+            ocorrencias_agrupadas[rua]['horas'][hora] = num_ocorrencias
+        else:
+            ocorrencias_agrupadas[rua]['horas'][hora] += num_ocorrencias
+
+        ocorrencias_agrupadas[rua]['total'] += num_ocorrencias
+
+    # Ordena os logradouros por número total de ocorrências de forma decrescente
+    ocorrencias_agrupadas = dict(sorted(ocorrencias_agrupadas.items(), key=lambda x: x[1]['total'], reverse=True))
+
+    # Ocorrências com horário '00:00:00' (horário manual)
+    ocorrencias_sem_horario = Roubo.objects.filter(bairro=bairro, hora_ocorrencia='00:00:00').count()
+
+    context = {
+        'bairro': bairro,
+        'ocorrencias_agrupadas': ocorrencias_agrupadas,
+        'ocorrencias_sem_horario': ocorrencias_sem_horario,
+    }
+
+    return render(request, 'detalhes_ocorrencia.html', context)
 
 
-def remover_bairro(request, id):
-    if request.method == 'DELETE':
-        try:
-            bairro = Bairro.objects.get(id=id)
-            bairro.delete()
-            return HttpResponse(status=204)  # Sucesso
-        except Bairro.DoesNotExist:
-            return JsonResponse({'error': 'Bairro não encontrado'}, status=404)
-    return JsonResponse({'error': 'Método não permitido'}, status=405)
+def pesquisar_bairro(request):
+    # Obtém o termo de busca enviado pelo formulário
+    query = request.GET.get('q')
 
+    # Inicializa uma variável para armazenar os resultados da busca
+    bairros_encontrados = None
+
+    # Se houver um termo de busca, realiza a busca no banco de dados
+    if query:
+        bairros_encontrados = Bairro.objects.filter(nome__icontains=query)
+
+    # Cria um contexto para passar as informações para o template
+    context = {
+        'query': query,
+        'bairros_encontrados': bairros_encontrados,
+    }
+
+    # Renderiza o template com os resultados da busca
+    return render(request, 'pesquisa_bairro.html', context)
+
+def feedback(request):
+    return render(request, 'feedback.html')
+
+
+
+def feedback_success(request):
+    return render(request, 'feedback_success.html')
+
+
+# Listar todos os bairros
+def listar_bairros(request):
+
+    return render(request, 'listar_bairros.html')
+
+
+# Editar um bairro
+def editar_bairro(request, bairro_id):
+    return render(request, 'editar_bairro.html')
+
+
+# Deletar um bairro
+def deletar_bairro(request):
+    return render(request, 'deletar_bairro.html')

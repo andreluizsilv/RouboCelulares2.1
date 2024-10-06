@@ -1,0 +1,36 @@
+{% load static %}
+
+<nav class="navbar navbar-light bg-light sticky-top" >
+    <div class="container-fluid">
+        <!-- Verifica se o usuário está na home (/) -->
+        {% if request.path != "/" %}
+            <a href="{% url 'mapa_roubos' %}" class="home-links"><i class="bi bi-house">Voltar</i></a>
+
+        {% endif %}
+
+        {% if request.user.is_authenticated %}
+                    {% if request.path != "/bairros/" %}
+                    <!-- Botão de editar bairros visível apenas para usuários autenticados -->
+                       <a href="{% url 'listar_bairros' %}" class="btn btn-primary">Ver Todos os Bairros</a>
+
+            {% endif %}
+        {% endif %}
+
+        <!-- Formulário de pesquisa, alinhado à direita -->
+        <form class="d-flex ms-auto" method="GET" action="{% url 'pesquisar_bairro' %}">
+            <label for="query" class="me-2">Pesquisar Bairro:</label>
+            <input class="form-control me-2" type="text" id="query" name="q" value="{{ query }}" placeholder="Digite o bairro">
+            <button class="btn btn-outline-success me-2" type="submit">Buscar</button>
+        </form>
+
+        <!-- Link para o formulário de feedback -->
+        {% if request.path != "/feedback/" %}
+        <a href="{% url 'feedback' %}" class="btn btn-outline-primary ms-2">Feedback</a>
+        {% endif %}
+    </div>
+</nav>
+
+
+
+
+
