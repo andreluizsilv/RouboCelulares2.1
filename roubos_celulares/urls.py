@@ -8,6 +8,7 @@ urlpatterns = [
     # Rota para a página de detalhes de uma ocorrência específica
     path('detalhes/<int:id>/', views.detalhes_ocorrencia, name='detalhes_ocorrencia'),
     path('pesquisa/', views.pesquisar_bairro, name='pesquisar_bairro'),
+    path('ocorrencias/', views.listar_ocorrencias, name='listar_ocorrencias'),
 
     # Rotas para feedback
     path('feedback/', views.feedback, name='feedback'),

@@ -1,7 +1,9 @@
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import render, get_object_or_404
 from .models import Bairro, Roubo
-from .mapa import gerar_mapa  # Importa a função de mapa.py
+from .mapa import gerar_mapa
+from urllib.parse import unquote
+
 
 def mapa_roubos(request):
     # Filtra todos os roubos e calcula os 5 bairros mais atacados
@@ -84,29 +86,89 @@ def detalhes_ocorrencia(request, id):
     return render(request, 'detalhes_ocorrencia.html', context)
 
 
+
 def pesquisar_bairro(request):
     # Obtém o termo de busca enviado pelo formulário
     query = request.GET.get('q')
 
-    # Inicializa uma variável para armazenar os resultados da busca
-    bairros_encontrados = None
-
     # Se houver um termo de busca, realiza a busca no banco de dados
     if query:
-        bairros_encontrados = Bairro.objects.filter(nome__icontains=query)
+        # Decodifica o termo de busca e remove espaços extras no início ou fim
+        query = unquote(query).strip()
+
+        # Remove todos os espaços da query para criar uma busca mais flexível
+        query_sem_espacos = query.replace(' ', '')
+
+        # Faz a busca pelo nome do bairro, ignorando maiúsculas/minúsculas
+        bairros_encontrados = Bairro.objects.filter(
+            # Busca pelo nome do bairro com e sem espaços
+            Q(nome__icontains=query) | Q(nome__icontains=query_sem_espacos)
+        ).annotate(num_ocorrencias=Count('roubo'))
+
+    # Constrói uma lista de dicionários com os dados necessários para o mapa
+    bairros_info = []
+    for bairro in bairros_encontrados:
+        bairros_info.append({
+            'nome': bairro.nome,
+            'latitude': bairro.latitude,
+            'longitude': bairro.longitude,
+            'num_ocorrencias': bairro.num_ocorrencias
+        })
+
+    # Gera o mapa usando a função gerar_mapa
+    mapa_html = gerar_mapa(bairros_info)
 
     # Cria um contexto para passar as informações para o template
     context = {
         'query': query,
         'bairros_encontrados': bairros_encontrados,
+        'mapa_html': mapa_html,
     }
 
     # Renderiza o template com os resultados da busca
     return render(request, 'pesquisa_bairro.html', context)
 
+
+
+def listar_ocorrencias(request):
+    # Obtenha todas as ocorrências
+    ocorrencias = Roubo.objects.all()
+    ocorrencias_info = []
+
+    # Contar ocorrências por bairro
+    ocorrencias_por_bairro = Roubo.contar_ocorrencias_por_bairro()
+
+    for ocorrencia in ocorrencias:
+        # Verifica se a latitude e longitude são diferentes de 0.0
+        if ocorrencia.bairro.latitude != 0.0 and ocorrencia.bairro.longitude != 0.0:
+            # Conta o número de ocorrências para o bairro atual
+            num_ocorrencias = next(
+                (item['num_ocorrencias'] for item in ocorrencias_por_bairro if item['bairro__nome'] == ocorrencia.bairro.nome),
+                0
+            )
+
+            ocorrencias_info.append({
+                'bairro': ocorrencia.bairro.nome,
+                'rua': ocorrencia.rua,
+                'latitude': ocorrencia.bairro.latitude,
+                'longitude': ocorrencia.bairro.longitude,
+                'hora': ocorrencia.hora_ocorrencia.strftime('%H:%M'),
+                'num_ocorrencias': num_ocorrencias  # Adiciona o número de ocorrências
+            })
+    print(ocorrencias_info)
+    # Gera o mapa com todas as ocorrências
+    mapa_html = gerar_mapa(ocorrencias_info)
+
+    context = {
+        'ocorrencias_info': ocorrencias_info,
+        'mapa_html': mapa_html,
+    }
+
+    return render(request, 'listar_ocorrencias.html', context)
+
+
 def feedback(request):
     return render(request, 'feedback.html')
-
 
 
 def feedback_success(request):

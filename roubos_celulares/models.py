@@ -8,7 +8,7 @@ class Bairro(models.Model):
     longitude = models.FloatField(null=True, blank=True)
 
     def __str__(self):
-        return self.nome
+        return f'Bairro:{self.nome}'
 
 
 class Roubo(models.Model):
@@ -28,7 +28,7 @@ class Roubo(models.Model):
         )
 
     def __str__(self):
-        return f'{self.rua}, {self.bairro.nome}, {self.cidade}, {self.data_ocorrencia}'
+        return f'Rua:{self.rua}, Bairro:{self.bairro.nome}, Cidade:{self.cidade}, Data da Ocorrencia:{self.data_ocorrencia}'
 
 
 class Feedback(models.Model):

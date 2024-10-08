@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Lista de Bairros</h2>
+    <form method="GET" action="{% url 'listar_bairros' %}" class="d-flex mb-3">
+        {% csrf_token %}
+        <input class="form-control me-2" type="text" id="query" name="query" value="{{ query }}" placeholder="Digite o nome do bairro">
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
+    </form>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bairro in bairros %}
+            <tr>
+                <td>{{ bairro.nome }}</td>
+                <td>{{ bairro.latitude|floatformat:2 }}</td>
+                <td>{{ bairro.longitude|floatformat:2 }}</td>
+                <td>
+                    <a href="{% url 'editar_bairro' bairro.id %}" class="btn btn-primary">Editar</a>
+                    <a href="{% url 'deletar_bairro' bairro.id %}" class="btn btn-danger">Deletar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="map">
+        {{ mapa_html|safe }}  <!-- Renderiza o HTML do mapa -->
+    </div>
+</div>
+{% endblock %}

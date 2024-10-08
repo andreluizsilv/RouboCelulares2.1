@@ -1,6 +1,7 @@
 import os
 import django
 import pandas as pd
+import re
 
 # Configurar o ambiente Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'celulares_subtraidos.settings')
@@ -20,6 +21,10 @@ def processar_hora(hora):
     except (ValueError, TypeError):
         return pd.to_datetime('00:00:00').time()  # Preencher com horário padrão
 
+def restaurar_espacos(bairro_nome):
+    # Insere um espaço antes de cada letra maiúscula que está imediatamente após outra letra maiúscula
+    return re.sub(r'([A-Z])([A-Z][a-z])', r'\1 \2', bairro_nome).strip()
+
 def limpar_e_salvar_bairros(bairros_df):
     try:
         bairros_df = bairros_df.dropna(subset=['LATITUDE', 'LONGITUDE', 'BAIRRO'])
@@ -35,14 +40,16 @@ def limpar_e_salvar_bairros(bairros_df):
                 print(f"Bairro {row['BAIRRO']} possui coordenadas nulas e será ignorado.")
                 continue
 
+            # Restaurar os espaços no nome do bairro
+            bairro_nome_corrigido = restaurar_espacos(row['BAIRRO'])
             obj, created = Bairro.objects.update_or_create(
-                nome=row['BAIRRO'],
+                nome=bairro_nome_corrigido,
                 defaults={'latitude': row['LATITUDE'], 'longitude': row['LONGITUDE']}
             )
             if created:
-                print(f"Bairro {row['BAIRRO']} criado com sucesso!")
+                print(f"Bairro {bairro_nome_corrigido} criado com sucesso!")
             else:
-                print(f"Bairro {row['BAIRRO']} atualizado com sucesso!")
+                print(f"Bairro {bairro_nome_corrigido} atualizado com sucesso!")
 
         print("Dados de bairros salvos no banco de dados com sucesso!")
     except Exception as e:
@@ -53,7 +60,7 @@ def limpar_e_salvar_roubos(celulares_df):
         celulares_df['HORA_OCORRENCIA'] = celulares_df['HORA_OCORRENCIA'].apply(processar_hora)
         celulares_df['RUA'] = celulares_df['RUA'].fillna('RUA desconhecida')
         celulares_df['BAIRRO'] = celulares_df['BAIRRO'].fillna('Bairro desconhecido')
-        celulares_df['CIDADE'] = celulares_df['CIDADE'].fillna('Cidade desconhecida')  # Adicionei o preenchimento para cidade
+        celulares_df['CIDADE'] = celulares_df['CIDADE'].fillna('Cidade desconhecida')  # Preenchendo cidade
 
         roubos = []
         for index, row in celulares_df.iterrows():

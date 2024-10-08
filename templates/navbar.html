@@ -1,18 +1,20 @@
 {% load static %}
 
-<nav class="navbar navbar-light bg-light sticky-top" >
+<nav class="navbar navbar-light bg-light sticky-top">
     <div class="container-fluid">
         <!-- Verifica se o usuário está na home (/) -->
         {% if request.path != "/" %}
             <a href="{% url 'mapa_roubos' %}" class="home-links"><i class="bi bi-house">Voltar</i></a>
-
         {% endif %}
 
-        {% if request.user.is_authenticated %}
-                    {% if request.path != "/bairros/" %}
-                    <!-- Botão de editar bairros visível apenas para usuários autenticados -->
-                       <a href="{% url 'listar_bairros' %}" class="btn btn-primary">Ver Todos os Bairros</a>
+        <!-- Botão para visualizar todas as ocorrências no mapa, disponível para qualquer usuário -->
+        <a href="{% url 'listar_ocorrencias' %}" class="btn btn-primary">Ver Todas as Ocorrências</a>
 
+        <!-- Botões visíveis apenas para usuários autenticados -->
+        {% if request.user.is_authenticated %}
+            <!-- Botão para gerenciar bairros -->
+            {% if request.path != "/bairros/" %}
+                <a href="{% url 'listar_bairros' %}" class="btn btn-primary ms-2">Gerenciar Bairros</a>
             {% endif %}
         {% endif %}
 
@@ -25,12 +27,7 @@
 
         <!-- Link para o formulário de feedback -->
         {% if request.path != "/feedback/" %}
-        <a href="{% url 'feedback' %}" class="btn btn-outline-primary ms-2">Feedback</a>
+            <a href="{% url 'feedback' %}" class="btn btn-outline-primary ms-2">Feedback</a>
         {% endif %}
     </div>
 </nav>
-
-
-
-
-

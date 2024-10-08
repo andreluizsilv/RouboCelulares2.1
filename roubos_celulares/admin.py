@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Roubo, Bairro, Feedback
 
-# Register your models here.
+admin.site.register(Roubo)
+admin.site.register(Bairro)
+admin.site.register(Feedback)
+

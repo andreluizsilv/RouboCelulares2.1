@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Deletar Bairro</h2>
+    <p>Você tem certeza que deseja deletar o bairro "{{ bairro.nome }}"?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Deletar</button>
+        <a href="{% url 'listar_bairros' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
