@@ -7,9 +7,11 @@
             <div class="col-md-4 lista-col">
                 {% if bairros_encontrados %}
                 <ul id="bairros-lista" class="list-unstyled">
-                    {% for bairro in bairros_encontrados %}
+                    {% for bairro in bairros_info %}
                     <li id="bairro-{{ forloop.counter }}">
-                        <a href="{% url 'detalhes_ocorrencia' bairro.id %}">{{ bairro.nome }} : {{ bairro.num_ocorrencias }} ocorrências</a>
+                        <a href="{% url 'detalhes_ocorrencia' bairro.id %}">
+                            {{ bairro.nome }} ({{ bairro.cidade }}) : {{ bairro.num_ocorrencias }} ocorrências
+                        </a>
                     </li>
                     {% endfor %}
                 </ul>

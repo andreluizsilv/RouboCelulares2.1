@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block content %}
 
-<h1>Bem-vindo ao Monitoramento de Roubos de Celulares na Cidade de São Paulo</h1>
+{% block content %}
+<h1>Bem-vindo ao Monitoramento de Roubos de Celulares fora da Cidade de São Paulo</h1>
 
 <div class="container">
     <div class="row">
@@ -12,15 +11,10 @@
                 {% for bairro in bairros_info %}
                     <li id="bairro-{{ forloop.counter }}">
                         <a href="{% url 'detalhes_ocorrencia' id=bairro.id %}">
-                            {{ bairro.nome }} ({{ bairro.cidade }}): {{ bairro.num_ocorrencias }} ocorrências</a>
+                            {{ bairro.nome }} - {{ bairro.cidade }}: {{ bairro.num_ocorrencias }} ocorrências</a>
                     </li>
                 {% endfor %}
             </ul>
-            <!-- Botão para ver bairros fora de São Paulo -->
-              <a href="{% url 'bairros_fora_sao_paulo' %}" class="btn btn-primary">
-                Ver bairros fora de São Paulo
-              </a>
-
         </div>
         <div class="col-md-8 mapa-col">
             <div id="map-container">

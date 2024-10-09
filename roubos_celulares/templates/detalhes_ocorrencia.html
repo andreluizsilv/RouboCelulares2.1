@@ -1,15 +1,15 @@
-<!-- roubo_celulares/templates/roubo_celulares/detalhes_ocorrencia.html -->
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="container">
-    <h2>Detalhes da Ocorrência no Bairro {{ bairro.nome }}</h2>
+    <h2>Detalhes da Ocorrência no Bairro {{ bairro.nome }} - {{ cidade }}</h2>
 
     <h3>Ocorrências Agrupadas por Local e Horário</h3>
     <div>
         {% for rua, dados in ocorrencias_agrupadas.items %}
         <div>
             <strong>Local:</strong> {{ rua }}<br>
-            <strong>Total de Ocorrências:</strong> {{ dados.total }}<br>
+            <strong>Total de Ocorrências:</strong> {{ dados.num_ocorrencias }}<br>
             <strong>Horários:</strong>
             <ul>
                 {% for hora, num_ocorrencias in dados.horas.items %}
@@ -22,6 +22,5 @@
 
     <h3>Ocorrências Sem Horário</h3>
     <p>Total de Ocorrências Sem Horário: {{ ocorrencias_sem_horario }}</p>
-
 </div>
 {% endblock %}

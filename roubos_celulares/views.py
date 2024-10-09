@@ -3,16 +3,22 @@ from django.shortcuts import render, get_object_or_404
 from .models import Bairro, Roubo
 from .mapa import gerar_mapa
 from urllib.parse import unquote
+from .utils import contar_ocorrencias_por_bairro
+
+
+
 
 
 def mapa_roubos(request):
-    # Filtra todos os roubos e calcula os 5 bairros mais atacados
+    # Filtra todos os roubos e calcula os 5 bairros mais atacados, filtrando pela cidade
     bairros_mais_atacados = (
-        Roubo.objects.values('bairro__nome')
+        Roubo.objects.filter(
+            cidade__in=['S.PAULO']  # Agora filtrando diretamente pela cidade no modelo Roubo
+        )
+        .values('bairro__nome')
         .annotate(num_ocorrencias=Count('id'))
         .order_by('-num_ocorrencias')[:5]
     )
-
     # Coleta as informações dos bairros
     bairros_info = []
     for bairro_data in bairros_mais_atacados:
@@ -25,7 +31,6 @@ def mapa_roubos(request):
                 'latitude': bairro_obj.latitude,
                 'longitude': bairro_obj.longitude
             })
-
     # Gera o mapa usando a função gerar_mapa
     mapa_html = gerar_mapa(bairros_info)
 
@@ -37,54 +42,61 @@ def mapa_roubos(request):
     return render(request, 'filtrar_roubos.html', context)
 
 
-def detalhes_ocorrencia(request, id):
-    # Obtém o bairro pelo ID
-    bairro = get_object_or_404(Bairro, id=id)
-
-    # Usa a função `contar_ocorrencias_por_bairro` apenas se quiser contagem geral (opcional)
-    # ocor_por_bairro = Roubo.contar_ocorrencias_por_bairro().filter(bairro=bairro)
-
-    # Filtra as ocorrências relacionadas ao bairro, usando diretamente o objeto `bairro`
-    ocorrencias = (
-        Roubo.objects.filter(bairro=bairro)
-        .exclude(hora_ocorrencia='00:00:00')
-        .exclude(rua__icontains='VEDAÇÃO DA DIVULGAÇÃO DOS DADOS RELATIVOS')
-        .values('rua', 'hora_ocorrencia')
+def bairros_fora_sao_paulo(request):
+    # Filtra todos os roubos que não sejam em São Paulo
+    bairros_mais_atacados_fora_saopaulo = (
+        Roubo.objects.exclude(cidade__iexact='S.PAULO')  # Exclui registros com cidade 'S.PAULO'
+        .values('bairro__nome', 'cidade')
         .annotate(num_ocorrencias=Count('id'))
-        .order_by('-num_ocorrencias')
+        .order_by('-num_ocorrencias')[:5]  # Mostra os 5 bairros mais atacados
     )
 
-    # Agrupa as ocorrências por logradouro e horários, contando as ocorrências por hora
-    ocorrencias_agrupadas = {}
-    for ocorrencia in ocorrencias:
-        rua = ocorrencia['rua']
-        hora = ocorrencia['hora_ocorrencia'].strftime('%H:%M') if ocorrencia['hora_ocorrencia'] else 'Desconhecida'
-        num_ocorrencias = ocorrencia['num_ocorrencias']
 
-        if rua not in ocorrencias_agrupadas:
-            ocorrencias_agrupadas[rua] = {'horas': {}, 'total': 0}
+    # Coleta as informações dos bairros
+    bairros_info = []
+    for bairro_data in bairros_mais_atacados_fora_saopaulo:
+        bairro_obj = Bairro.objects.filter(nome__iexact=bairro_data['bairro__nome']).first()
+        if bairro_obj and bairro_obj.latitude is not None and bairro_obj.longitude is not None:
+            bairros_info.append({
+                'id': bairro_obj.id,
+                'nome': bairro_obj.nome,
+                'cidade': bairro_data['cidade'],  # Adiciona o nome da cidade
+                'num_ocorrencias': bairro_data['num_ocorrencias'],
+                'latitude': bairro_obj.latitude,
+                'longitude': bairro_obj.longitude
+            })
 
-        if hora not in ocorrencias_agrupadas[rua]['horas']:
-            ocorrencias_agrupadas[rua]['horas'][hora] = num_ocorrencias
-        else:
-            ocorrencias_agrupadas[rua]['horas'][hora] += num_ocorrencias
+    # Gera o mapa com os dados coletados
+    mapa_html = gerar_mapa(bairros_info)
 
-        ocorrencias_agrupadas[rua]['total'] += num_ocorrencias
+    context = {
+        'bairros_info': bairros_info,
+        'mapa_html': mapa_html,
+    }
 
-    # Ordena os logradouros por número total de ocorrências de forma decrescente
-    ocorrencias_agrupadas = dict(sorted(ocorrencias_agrupadas.items(), key=lambda x: x[1]['total'], reverse=True))
+    return render(request, 'bairros_fora_sao_paulo.html', context)
 
-    # Ocorrências com horário '00:00:00' (horário manual)
-    ocorrencias_sem_horario = Roubo.objects.filter(bairro=bairro, hora_ocorrencia='00:00:00').count()
+
+def detalhes_ocorrencia(request, id):
+    bairro = get_object_or_404(Bairro, id=id)
+
+    # Chama a função auxiliar para obter os dados de ocorrências
+    ocorrencias_agrupadas, ocorrencias_sem_horario = contar_ocorrencias_por_bairro(bairro)
+
+    # Obtemos todas as ocorrências associadas ao bairro para pegar a cidade
+    ocorrencias = Roubo.objects.filter(bairro=bairro)
+
+    # Considerando que todas as ocorrências têm a mesma cidade, pegamos a cidade da primeira ocorrência
+    cidade = ocorrencias.first().cidade if ocorrencias.exists() else 'Cidade não especificada'
 
     context = {
         'bairro': bairro,
+        'cidade': cidade,  # Passando a cidade para o contexto
         'ocorrencias_agrupadas': ocorrencias_agrupadas,
         'ocorrencias_sem_horario': ocorrencias_sem_horario,
     }
-
+    print(context)
     return render(request, 'detalhes_ocorrencia.html', context)
-
 
 
 def pesquisar_bairro(request):
@@ -117,7 +129,6 @@ def pesquisar_bairro(request):
 
     # Gera o mapa usando a função gerar_mapa
     mapa_html = gerar_mapa(bairros_info)
-
     # Cria um contexto para passar as informações para o template
     context = {
         'query': query,
@@ -155,7 +166,6 @@ def listar_ocorrencias(request):
                 'hora': ocorrencia.hora_ocorrencia.strftime('%H:%M'),
                 'num_ocorrencias': num_ocorrencias  # Adiciona o número de ocorrências
             })
-    print(ocorrencias_info)
     # Gera o mapa com todas as ocorrências
     mapa_html = gerar_mapa(ocorrencias_info)
 
