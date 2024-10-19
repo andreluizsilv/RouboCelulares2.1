@@ -1,0 +1,48 @@
+/* Define o layout do body para ocupar toda a altura da página */
+body {
+    background-color: aquamarine;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Garante que o conteúdo ocupe a altura da viewport */
+}
+
+/* Navbar fixo no topo */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Espaço para compensar a altura do navbar */
+.flex-grow-1 {
+    flex-grow: 1;
+    padding-top: 70px;  /* Espaço para o navbar */
+    width: 100%;
+}
+
+/* Footer fixo na parte inferior */
+footer {
+    position: relative; /* Define a posição como relativa ao layout da página */
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    text-align: center;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 0.8rem;
+    height: 40px; /* Define a altura exata do footer */
+    margin-top: auto; /* Garante que o footer seja empurrado para o fim do conteúdo */
+}
+
+/* Ajuste para garantir que o conteúdo do container esteja bem posicionado */
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Garante que o conteúdo comece do topo */
+    align-items: stretch;
+    width: 100%;
+}
