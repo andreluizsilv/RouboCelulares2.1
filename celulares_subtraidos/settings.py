@@ -23,11 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-rgc#ze-kq5e$mqk7zjg=^l-+dj4*1gyyx7tcz9r)4%iwa^s%j9'
+CSRF_TRUSTED_ORIGINS = ['roubocelulares21-production.up.railway.app','https://*.127.0.0.1']
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['roubocelulares21-production.up.railway.app', 'localhost', '127.0.0.1']
 
 
 # Application definition
