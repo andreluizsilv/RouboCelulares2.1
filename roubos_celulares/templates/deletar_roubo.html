@@ -1,0 +1,21 @@
+<!-- templates/deletar_roubo.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Deletar Ocorrência de Roubo</h2>
+    <p>Rua: <strong>{{ roubo.rua }}</strong></p>
+    <p>Data: <strong>{{ roubo.data_ocorrencia }}</strong></p>
+    <p>Hora: <strong>{{ roubo.hora_ocorrencia }}</strong></p>
+    <p>Cidade: <strong>{{ roubo.cidade }}</strong></p>
+
+    <p>Tem certeza que deseja deletar esta ocorrência de roubo? Esta ação não pode ser desfeita.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirmar Deleção</button>
+        <a href="{% url 'detalhes_bairro' roubo.bairro.id %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

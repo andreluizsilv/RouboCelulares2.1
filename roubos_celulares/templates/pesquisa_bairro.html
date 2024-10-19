@@ -4,22 +4,37 @@
     <h2>Resultados da Pesquisa</h2>
     <div class="container">
         <div class="row">
-            <div class="col-md-4 lista-col">
-                {% if bairros_encontrados %}
-                <ul id="bairros-lista" class="list-unstyled">
-                    {% for bairro in bairros_info %}
-                    <li id="bairro-{{ forloop.counter }}">
-                        <a href="{% url 'detalhes_ocorrencia' bairro.id %}">
-                            {{ bairro.nome }} ({{ bairro.cidade }}) : {{ bairro.num_ocorrencias }} ocorrências
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
+            <div class="col-md-6 lista-col">  <!-- Tabela à esquerda ocupando 6 colunas -->
+                {% if bairros_info %}
+                <table class="table table-success table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Bairro</th>
+                            <th scope="col">Cidade</th>
+                            <th scope="col">Ocorrências</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bairro in bairros_info %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>
+                                <a href="{% url 'detalhes_ocorrencia' bairro.id %}">
+                                    {{ bairro.nome }}
+                                </a>
+                            </td>
+                            <td>{{ bairro.cidade }}</td>
+                            <td>{{ bairro.num_ocorrencias }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
                 {% else %}
                     <p>Nenhum bairro encontrado para "{{ query }}"</p>
                 {% endif %}
             </div>
-            <div class="col-md-8 mapa-col">
+            <div class="col-md-6 mapa-col">  <!-- Mapa à direita ocupando 6 colunas -->
                 <div id="map-container">
                     {{ mapa_html|safe }}  <!-- Exibe o mapa aqui -->
                 </div>

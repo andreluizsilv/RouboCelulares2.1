@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'roubos_celulares'
+    'roubos_celulares',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +64,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'roubos_celulares.context_processors.datas_ocorrencias',
+
             ],
         },
     },

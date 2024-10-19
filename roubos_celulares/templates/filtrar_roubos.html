@@ -12,7 +12,7 @@
                 {% for bairro in bairros_info %}
                     <li id="bairro-{{ forloop.counter }}">
                         <a href="{% url 'detalhes_ocorrencia' id=bairro.id %}">
-                            {{ bairro.nome }} ({{ bairro.cidade }}): {{ bairro.num_ocorrencias }} ocorrências</a>
+                            {{ bairro.nome }} - {{ bairro.cidade }} : {{ bairro.num_ocorrencias }} ocorrências</a>
                     </li>
                 {% endfor %}
             </ul>

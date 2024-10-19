@@ -1,37 +1,48 @@
+/* Define o layout do body para ocupar toda a altura da página */
 body {
-    background-color: aquamarine !important;
-    height: 100%;
+    background-color: aquamarine;
     margin: 0;
-}
-
-#map-container {
-    height: 500px; /* Altura do mapa */
-    width: 100%; /* Largura total para o contêiner do mapa */
-}
-
-.mapa-col {
-    padding: 0; /* Remove o padding da coluna do mapa */
-}
-
-.lista-col {
-    padding: 0; /* Remove o padding da coluna da lista */
     display: flex;
-    flex-direction: column; /* Garante que a lista e os botões estejam na coluna */
-    justify-content: flex-start; /* Alinha os itens ao início da coluna */
-    text-align: left; /* Alinha o texto à esquerda */
+    flex-direction: column;
+    min-height: 100vh; /* Garante que o conteúdo ocupe a altura da viewport */
 }
 
-.lista-col h2 {
-    margin-bottom: 20px; /* Adiciona espaço abaixo do título */
+/* Navbar fixo no topo */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.lista-col li {
-    margin-left: 0; /* Garante que os itens da lista encostem na margem esquerda */
+/* Espaço para compensar a altura do navbar */
+.flex-grow-1 {
+    flex-grow: 1;
+    padding-top: 70px;  /* Espaço para o navbar */
+    width: 100%;
 }
 
-/* Ajusta o contêiner para ocupar toda a largura disponível */
+/* Footer fixo na parte inferior */
+footer {
+    position: relative; /* Define a posição como relativa ao layout da página */
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    text-align: center;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 0.8rem;
+    height: 40px; /* Define a altura exata do footer */
+    margin-top: auto; /* Garante que o footer seja empurrado para o fim do conteúdo */
+}
+
+/* Ajuste para garantir que o conteúdo do container esteja bem posicionado */
 .container {
+    flex: 1;
     display: flex;
-    flex-direction: row; /* Alinha colunas na horizontal */
-    justify-content: space-between; /* Espaça as colunas */
+    flex-direction: column;
+    justify-content: flex-start; /* Garante que o conteúdo comece do topo */
+    align-items: stretch;
+    width: 100%;
 }

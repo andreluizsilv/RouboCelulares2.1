@@ -2,25 +2,45 @@
 
 {% block content %}
 <div class="container">
-    <h2>Detalhes da Ocorrência no Bairro {{ bairro.nome }} - {{ cidade }}</h2>
 
-    <h3>Ocorrências Agrupadas por Local e Horário</h3>
-    <div>
-        {% for rua, dados in ocorrencias_agrupadas.items %}
-        <div>
-            <strong>Local:</strong> {{ rua }}<br>
-            <strong>Total de Ocorrências:</strong> {{ dados.num_ocorrencias }}<br>
-            <strong>Horários:</strong>
-            <ul>
-                {% for hora, num_ocorrencias in dados.horas.items %}
-                <li>{{ hora }}: {{ num_ocorrencias }} ocorrência(s)</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endfor %}
-    </div>
+    <table class="table table-bordered border-primary">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Local</th>
+                <th scope="col">Total de Ocorrências</th>
+                <th scope="col">Horários</th>
+            </tr>
+        </thead>
+        <tbody>
 
-    <h3>Ocorrências Sem Horário</h3>
+            <tr>
+                {% for rua, dados in ocorrencias_agrupadas.items %}
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ rua }}</td>
+                    {% for hora, num_ocorrencias in dados.horas.items %}
+                    <div>
+                        <td>{{ num_ocorrencias }} Vezes</td>
+                        <td>{{ hora }}</td>
+                    </div>
+                    {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+    <!-- Exibição de Ocorrências Sem Horário -->
     <p>Total de Ocorrências Sem Horário: {{ ocorrencias_sem_horario }}</p>
+        </div>
+
+        <!-- Coluna com o mapa -->
+        <div class="col-md-8 mapa-col">
+            <div id="map-container">
+                {{ mapa_html|safe }}  <!-- Mapa exibido aqui -->
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
+

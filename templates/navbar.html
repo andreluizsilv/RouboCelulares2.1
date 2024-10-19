@@ -7,15 +7,10 @@
             <a href="{% url 'mapa_roubos' %}" class="home-links"><i class="bi bi-house">Voltar</i></a>
         {% endif %}
 
-        <!-- Botão para visualizar todas as ocorrências no mapa, disponível para qualquer usuário -->
-        <a href="{% url 'listar_ocorrencias' %}" class="btn btn-primary">Ver Todas as Ocorrências</a>
 
         <!-- Botões visíveis apenas para usuários autenticados -->
         {% if request.user.is_authenticated %}
-            <!-- Botão para gerenciar bairros -->
-            {% if request.path != "/bairros/" %}
-                <a href="{% url 'listar_bairros' %}" class="btn btn-primary ms-2">Gerenciar Bairros</a>
-            {% endif %}
+                <a class="nav-link" href="{% url 'gerenciar_bairros' %}">Gerenciar Bairros</a>
         {% endif %}
 
         <!-- Formulário de pesquisa, alinhado à direita -->

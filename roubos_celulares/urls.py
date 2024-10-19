@@ -9,18 +9,19 @@ urlpatterns = [
     # Rota para a página de detalhes de uma ocorrência específica
     path('detalhes/<int:id>/', views.detalhes_ocorrencia, name='detalhes_ocorrencia'),
     path('pesquisa/', views.pesquisar_bairro, name='pesquisar_bairro'),
-    path('ocorrencias/', views.listar_ocorrencias, name='listar_ocorrencias'),
 
     # Rotas para feedback
     path('feedback/', views.feedback, name='feedback'),
     path('feedback-success/', views.feedback_success, name='feedback_success'),
 
     # Rota para listar bairros (disponível apenas para usuários autenticados)
-    path('bairros/', views.listar_bairros, name='listar_bairros'),
+    path('gerenciar_bairros/', views.gerenciar_bairros, name='gerenciar_bairros'),
+    path('bairros/<int:bairro_id>/', views.detalhes_bairro, name='detalhes_bairro'),
 
-    # Rota para editar bairros (disponível apenas para usuários autenticados)
-    path('bairros/editar/', views.editar_bairro, name='editar_bairro'),
+    # Rotas para editar e deletar bairros
+    path('bairros/<int:bairro_id>/editar/', views.editar_bairro, name='editar_bairro'),  # Nova rota para editar bairro
+    path('bairros/<int:bairro_id>/deletar/', views.deletar_bairro, name='deletar_bairro'),
 
-    # Rota para deletar bairro (disponível apenas para usuários autenticados)
-    path('bairros/deletar/', views.deletar_bairro, name='deletar_bairro'),
+    path('roubos/<int:roubo_id>/editar/', views.editar_roubo, name='editar_roubo'),
+    path('roubos/<int:roubo_id>/deletar/', views.deletar_roubo, name='deletar_roubo'),
 ]

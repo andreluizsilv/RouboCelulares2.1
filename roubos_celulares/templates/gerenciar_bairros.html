@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Gerenciar Bairros</h1>
+
+    <!-- Campo de pesquisa -->
+    <form method="GET" action="{% url 'gerenciar_bairros' %}">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input type="text" name="q" placeholder="Digite o nome do bairro"  class="form-control">
+            <button type="submit" class="btn btn-primary">Pesquisar</button>
+        </div>
+    </form>
+
+    <!-- Exibir mensagem se o campo 'query' tiver algum valor -->
+    {% if query %}
+        <p>Resultados para: <strong>{{ query }}</strong></p>
+    {% endif %}
+
+    <!-- Lista de bairros encontrados -->
+    {% if bairros %}
+        <h2>Resultados da Pesquisa:</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome do Bairro</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Ocorrências</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bairro in bairros %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="{% url 'detalhes_bairro' bairro.id %}">{{ bairro.nome }}</a></td>
+                        <td>{{ bairro.latitude }}</td>
+                        <td>{{ bairro.longitude }}</td>
+                        <td>{{ bairro.roubo_set.count }}</td>
+                        <td>
+                            <a href="{% url 'editar_bairro' bairro.id %}" class="btn btn-sm btn-warning">Editar</a>
+                            <a href="{% url 'deletar_bairro' bairro.id %}" class="btn btn-sm btn-danger">Deletar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhum bairro encontrado.</p>
+    {% endif %}
+</div>
+{% endblock %}

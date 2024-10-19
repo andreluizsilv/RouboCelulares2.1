@@ -11,7 +11,7 @@ def gerar_mapa(bairros):
             return "<p>Coordenadas ausentes para o bairro pesquisado.</p>"
     else:
         # Se houver mais de um bairro, centraliza o mapa em São Paulo
-        m = folium.Map(location=[-23.5505, -46.6333], zoom_start=12)
+        m = folium.Map(location=[-23.5505, -46.6333], zoom_start=9)
 
     # Adiciona os marcadores para os bairros
     for bairro_data in bairros:

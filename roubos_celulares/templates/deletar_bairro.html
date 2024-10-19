@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="container">
-    <h2>Deletar Bairro</h2>
-    <p>Você tem certeza que deseja deletar o bairro "{{ bairro.nome }}"?</p>
+    <h2>Deletar Bairro: {{ bairro.nome }}</h2>
+    <p>Tem certeza que deseja deletar este bairro? Esta ação não pode ser desfeita.</p>
+
     <form method="POST">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Deletar</button>
-        <a href="{% url 'listar_bairros' %}" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-danger">Confirmar Deleção</button>
+        <a href="{% url 'detalhes_bairro' bairro.id %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 {% endblock %}

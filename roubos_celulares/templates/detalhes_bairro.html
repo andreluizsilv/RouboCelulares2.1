@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Detalhes do Bairro: {{ bairro.nome }} - {{ cidade }}</h2>
+
+    <p><strong>Latitude:</strong> {{ bairro.latitude }}</p>
+    <p><strong>Longitude:</strong> {{ bairro.longitude }}</p>
+
+    <!-- Botões de Editar e Deletar (visíveis apenas para Superusuários) -->
+    {% if user.is_authenticated and user.is_superuser %}
+        <a href="{% url 'editar_bairro' bairro.id %}" class="btn btn-warning">Editar Bairro</a>
+        <a href="{% url 'deletar_bairro' bairro.id %}" class="btn btn-danger">Deletar Bairro</a>
+    {% endif %}
+
+    <h3>Ocorrências de Roubo no Bairro</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Rua</th>
+                <th>Cidade</th>
+                {% if user.is_authenticated and user.is_superuser %}
+                    <th>Ações</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for roubo in roubos %}
+            <tr>
+                <td>{{ roubo.data_ocorrencia }}</td>
+                <td>{{ roubo.hora_ocorrencia }}</td>
+                <td>{{ roubo.rua }}</td>
+                <td>{{ roubo.cidade }}</td>
+                {% if user.is_authenticated and user.is_superuser %}
+                    <td>
+                        <a href="{% url 'editar_roubo' roubo.id %}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="{% url 'deletar_roubo' roubo.id %}" class="btn btn-sm btn-danger">Deletar</a>
+                    </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

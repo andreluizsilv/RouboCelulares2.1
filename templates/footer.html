@@ -1,6 +1,4 @@
-{% load static %}
-
-<footer class="p-2 bg-light text-lg-start sticky-bottom" >
+<footer class="p-2 bg-light text-lg-start sticky-bottom">
   <div class="container p-4 footer-content">
     <div class="section">
       <h5>Fonte dos Dados</h5>
@@ -9,15 +7,26 @@
 
     <div class="section">
       <h5>Aviso Importante</h5>
-      <p>Em caso de roubo ou assalto, procure imediatamente as autoridades competentes para registrar um boletim de ocorrência. Isso é essencial para que providências sejam tomadas e para que possamos manter nossa base de dados atualizada e precisa.</p>
-      <p><strong>Colabore com a segurança pública e ajude a melhorar nossa base de dados!</strong></p>
+      <p>
+        O roubo de celulares é uma realidade preocupante. Tenha em mente que o celular contém uma parte significativa da sua vida — tanto financeira quanto pessoal — mas ele não é essencial para sua sobrevivência. <strong>Preserve sua vida</strong>, pois ela é o bem mais valioso que você possui. Em caso de assalto, sempre coloque sua segurança em primeiro lugar.
+      </p>
+      <p>
+        <strong>Colabore com a segurança pública!</strong> Em caso de roubo, faça um boletim de ocorrência para que as autoridades possam agir e nossa base de dados se mantenha atualizada e precisa.
+      </p>
+    </div>
+
+    <!-- Exibir as datas da primeira e última ocorrência -->
+    <div class="section">
+      <h6>Dados atualizados:</h6>
+      <p>Os dados foram obtidos entre <strong>: {{ primeira_data }}</strong> e <strong>{{ ultima_data }}</strong>.</p>
     </div>
   </div>
-    <!-- Informação sobre feedback -->
-    <div class="text-center mb-4">
-      <p>Para enviar sugestões, reclamações ou reportar bugs, aperte o botão de feedback ou <a href="#">clique aqui</a>.</p>
-    </div>
+
+  <!-- Informação sobre feedback -->
+  <div class="text-center mb-4">
+    <p>Para enviar sugestões, reclamações ou reportar bugs, aperte o botão de feedback ou <a href="{% url 'feedback' %}">clique aqui</a>.</p>
   </div>
+
   <!-- Copyright -->
   <div class="footer-bottom text-center p-3">
     © 2024 Desenvolvido por Andre Silva

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Formulário de Feedback</h2>
+        {% csrf_token %}
+        <form method="post">
+        {% csrf_token %}
+
+        <label for="nome">Nome:</label><br>
+        <input type="text" id="nome" name="nome" value="{{ form.nome.value }}" required><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" value="{{ form.email.value }}" required><br><br>
+
+        <label>Como foi sua experiência com o sistema?</label><br>
+        <input type="radio" id="excelente" name="experiencia" value="excelente">
+        <label for="excelente">Excelente</label><br>
+        <input type="radio" id="boa" name="experiencia" value="boa">
+        <label for="boa">Boa</label><br>
+        <input type="radio" id="regular" name="experiencia" value="regular">
+        <label for="regular">Regular</label><br>
+        <input type="radio" id="ruim" name="experiencia" value="ruim">
+        <label for="ruim">Ruim</label><br><br>
+
+        <label>O que poderia ser melhorado?</label><br>
+        <input type="radio" id="nada" name="melhorias" value="nada">
+        <label for="nada">Nada</label><br>
+        <input type="radio" id="pequenas" name="melhorias" value="pequenas">
+        <label for="pequenas">Pequenas mudanças</label><br>
+        <input type="radio" id="moderadas" name="melhorias" value="moderadas">
+        <label for="moderadas">Mudanças moderadas</label><br>
+        <input type="radio" id="grandes" name="melhorias" value="grandes">
+        <label for="grandes">Mudanças grandes</label><br><br>
+
+        <label>Gostaria de deixar alguma informação adicional?</label><br>
+        <input type="radio" id="sim" name="deixar_informacao" value="sim">
+        <label for="sim">Sim</label><br>
+        <input type="radio" id="nao" name="deixar_informacao" value="nao">
+        <label for="nao">Não</label><br><br>
+
+        <div id="comentario-container" style="display: none;">
+            <label for="comentario">Por favor, deixe seu comentário:</label><br>
+            <textarea id="comentario" name="comentario" class="larger-textarea">{{ form.comentario.value }}</textarea><br><br>
+        </div>
+
+        <button type="submit">Enviar</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deixarInformacaoRadios = document.querySelectorAll('input[name="deixar_informacao"]');
+        const comentarioContainer = document.getElementById('comentario-container');
+
+        function updateComentarioContainer() {
+            const selectedValue = document.querySelector('input[name="deixar_informacao"]:checked');
+            if (selectedValue && selectedValue.value === 'sim') {
+                comentarioContainer.style.display = 'block';
+            } else {
+                comentarioContainer.style.display = 'none';
+            }
+        }
+
+        deixarInformacaoRadios.forEach(radio => radio.addEventListener('change', updateComentarioContainer));
+    });
+</script>
+{% endblock %}
