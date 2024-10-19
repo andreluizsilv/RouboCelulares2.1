@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rgc#ze-kq5e$mqk7zjg=^l-+dj4*1gyyx7tcz9r)4%iwa^s%j9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -90,16 +90,7 @@ DATABASES = {
 DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
-else:
-    # Fallback para PostgreSQL caso a variável DATABASE_URL não esteja definida
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('railway'),
-        'USER': os.getenv('postgres'),
-        'PASSWORD': os.getenv('FStEinQssHPszORyNqNkyknORSobOSVY'),
-        'HOST': os.getenv('postgres.railway.internal'),
-        'PORT': os.getenv('5432'),
-    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
