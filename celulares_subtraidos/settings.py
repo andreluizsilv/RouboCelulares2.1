@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,6 +86,20 @@ DATABASES = {
     }
 }
 
+# Verificação da variável de ambiente
+DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+else:
+    # Fallback para PostgreSQL caso a variável DATABASE_URL não esteja definida
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('railway'),
+        'USER': os.getenv('postgres'),
+        'PASSWORD': os.getenv('FStEinQssHPszORyNqNkyknORSobOSVY'),
+        'HOST': os.getenv('postgres.railway.internal'),
+        'PORT': os.getenv('5432'),
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
